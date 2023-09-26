@@ -47,3 +47,35 @@ class AVLTree:
         self.update_height(y)
 
         return y
+    
+    def insert(self, root, key):
+        if root is None:
+            return Node(key)
+        
+        if key < root.key:
+            root.left = self.insert(root.left, key)
+        else:
+            root.right = self.insert(root.right, key)
+
+        self.update_height(root)
+        balance = self.balance(root)
+
+        if balance > 1:
+            if key < root.left.key:
+                return self.rotate_right(root)
+            else:
+                root.left = self.rotate_left(root.left)
+                return self.rotate_right(root)
+
+        if balance < -1:
+            if key > root.right.key:
+                return self.rotate_left(root)
+            else:
+                root.right = self.rotate_right(root.right)
+                return self.rotate_left(root)
+
+        return root
+
+    def delete(self, root, key):
+        if root is None:
+            return root
